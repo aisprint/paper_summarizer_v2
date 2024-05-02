@@ -98,7 +98,7 @@ if text:
 
 
 #Define system prompt
-with open(".\system_prompt.txt","r") as f:
+with open("./system_prompt.txt","r") as f:
     system_prompt = f.read()
 
 main_prompt = "Here is a academic paper: <paper>{}</paper>"
@@ -124,7 +124,7 @@ def generate_response_openai(prompt, selected_model, temperature, max_tokens):
 # Anthropic
 def generate_response_anthropic(prompt, selected_model, temperature, max_tokens):
     if not anthropic_api_key.startswith('sk-'):
-        st.warning('Please enter your OpenAI API key!', icon='⚠')
+        st.warning('Please enter your Anthropic API key!', icon='⚠')
     if submitted and anthropic_api_key.startswith('sk-'):
         response = client.messages.create(
         system = system_prompt,
