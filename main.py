@@ -150,16 +150,18 @@ st.markdown(css_style, unsafe_allow_html=True)
 
 # Select model and submit button
 models = [
-    "gpt-4-turbo",
-    "gpt-3.5-turbo",
-    "claude-3-opus-20240229",
+    "claude-3-haiku-20240307",
     "claude-3-sonnet-20240229",
-    "claude-3-haiku-20240307"
+    "gpt-3.5-turbo",
+    "gpt-4-turbo",
+    "claude-3-opus-20240229",
 ]
 
 with st.form('my_form'):
-    text_input = st.text_area('Enter prompt:(You can leave it as is)', 'Here is an academic paper: <paper>{}</paper>')
-    input_text = text_input.format(text)
+    text_input = st.text_area('Enter prompt:(You can leave it as is)', 'Here is an academic paper.')
+    paper_placeholder = ': <paper>{}</paper>'
+    Paper_contents = paper_placeholder.format(text)
+    input_text = f"{text_input}\n{Paper_contents}"
     selected_model = st.selectbox('Choose a model:', models)
     temperature = st.slider("Set Temperature (0-1.0):", min_value=0.0, max_value=1.0, value=0.5, step=0.01)
     max_tokens = st.number_input("Set Max Tokens(1-4000):", min_value=1, max_value=4000, value=2000)
