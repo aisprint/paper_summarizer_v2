@@ -44,7 +44,7 @@ You will be given a research paper and your job is to extract the following:
 
 ### Main Results/Findings:
 - List of metrics: List for each metric: definition, importance, implications, and contextual relevance.
-- Graphs/Tables: Highlight any key graphs, figures, or tables that provide a significant understanding of the results. Provide a brief description of each.
+- Graphs/Tables: Highlight any key graphs, figures, or tables that provide a significant understanding of the results. Provide a brief description of each. Please add Figure/Table No.
 - Outcomes: List primary outcomes or findings figures and tables.
 - Data & Code Availability: Indicate whether the paper provides access to the data and code, which is essential for reproducibility and further research.
 - Statistical Significance: Highlight if the findings were statistically significant and any p-values associated.
