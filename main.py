@@ -161,12 +161,12 @@ with st.form('my_form'):
     text_input = st.text_area('Enter prompt:(You can leave it as is)', 'Here is an academic paper.')
     paper_placeholder = ': <paper>{}</paper>'
     Paper_contents = paper_placeholder.format(text)
-    input_text = f"{text_input}\n{Paper_contents}"
-    selected_model = st.selectbox('Choose a model:', models)
-    temperature = st.slider("Set Temperature (0-1.0):", min_value=0.0, max_value=1.0, value=0.5, step=0.01)
-    max_tokens = st.number_input("Set Max Tokens(1-4000):", min_value=1, max_value=4000, value=2000)
     submitted = st.form_submit_button('Submit')
     if submitted:
+        input_text = f"{text_input}\n{Paper_contents}"
+        selected_model = st.selectbox('Choose a model:', models)
+        temperature = st.slider("Set Temperature (0-1.0):", min_value=0.0, max_value=1.0, value=0.5, step=0.01)
+        max_tokens = st.number_input("Set Max Tokens(1-4000):", min_value=1, max_value=4000, value=2000)
         with st.spinner('Summarizing.....🤖💤'):
             if selected_model.startswith('gpt'):
                 response_text = generate_response_openai(input_text, selected_model, temperature, max_tokens)
