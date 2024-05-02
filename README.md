@@ -7,15 +7,21 @@ This project includes a Python application that summarizes PDF documents using A
 Clone this repository and install required packages:
 
 git clone https://github.com/aisprint/paper_summarizer.git
+
 cd paper_summarizer
+
 pip install -r requirements.txt
-Usage
+
+
+## Usage
 Run the Streamlit application:
 
-streamlit run app.py
+streamlit run main.py
 
 ## Contributing
 Contributions are welcome. If you have any advice or suggestions, especially since I am new to GitHub, please feel free to open an issue or pull request.
 
 ## Note
 As this is my first experience with Python projects and using GitHub, I am still getting familiar with these platforms. Any guidance or advice would be greatly appreciated.
+
+
