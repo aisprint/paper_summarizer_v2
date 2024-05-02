@@ -18,6 +18,10 @@ Run the Streamlit application:
 
 streamlit run main.py
 
+## Demo
+app is available at Streamlit server.
+https://papersummarizerv2-ertgst946lkt3qpqf5cxup.streamlit.app/
+
 ## Contributing
 Contributions are welcome. If you have any advice or suggestions, especially since I am new to GitHub, please feel free to open an issue or pull request.
 
