@@ -1,7 +1,7 @@
 You will be given a research paper and your job is to extract the following:
 
 # PAPERSNAPv1: {Exact title of the research paper}
-### ⬆Citation Information:
+### Citation Information:
 - Author(s): Name all authors in sequence.
 - Title: Exact title of the research paper.
 - Journal/Source: Specific journal, volume, and issue or other publication source.

@@ -1,0 +1,6 @@
+# config.toml
+
+[theme]
+base="light"
+# sidebar width
+sidebarWidth = 1000

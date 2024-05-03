@@ -1,5 +1,6 @@
 from dotenv import load_dotenv
 import os
+import pandas as pd
 
 import streamlit as st
 
@@ -7,6 +8,8 @@ from PyPDF2 import PdfReader
 
 from anthropic import Anthropic
 from openai import OpenAI
+
+import tiktoken
 
 import numpy as np
 
@@ -43,7 +46,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Display the stylish title
-st.markdown('<div class="title-style">🧑‍🎓Paper Summarizer📜</div>', unsafe_allow_html=True)
+st.markdown('<div class="title-style">🎓Paper Summarizer📜</div>', unsafe_allow_html=True)
 
 # Display author and the updated date
 current_date = datetime.now().strftime("%m/%d/%Y")
@@ -62,12 +65,58 @@ st.sidebar.markdown(
     "[How to get OpenAI API key?](https://help.openai.com/en/articles/4936850-where-do-i-find-my-openai-api-key)", 
     unsafe_allow_html=True
 )
+st.sidebar.markdown(
+    "[OpenAI API Pricing](https://openai.com/api/pricing)", 
+    unsafe_allow_html=True
+)
 
 anthropic_api_key = st.sidebar.text_input('Anthropic API Key', type='password')
 st.sidebar.markdown(
     "[How to get Anthropic API key?](https://docs.anthropic.com/claude/reference/getting-started-with-the-api)", 
     unsafe_allow_html=True
 )
+st.sidebar.markdown(
+    "[Anthropic API Pricing](https://www.anthropic.com/api)", 
+    unsafe_allow_html=True
+)
+
+# API Pricing
+data = {
+    "Model": [
+        "claude-3-haiku-20240307", 
+        "claude-3-sonnet-20240229", 
+        "gpt-3.5-turbo", 
+        "gpt-4-turbo", 
+        "claude-3-opus-20240229"
+    ],
+    "Prompt Cost": [
+        "$0.0025", 
+        "$0.03", 
+        "$0.005", 
+        "$0.1", 
+        "$0.15"
+    ],
+    "Completion Cost": [
+        "$0.0025", 
+        "$0.03", 
+        "$0.003", 
+        "$0.06", 
+        "$0.15"
+    ],
+    "Total Cost": [
+        "$0.005", 
+        "$0.06", 
+        "$0.008", 
+        "$0.16", 
+        "$0.3"
+    ]
+}
+
+# dataframe for api pricing
+df_costs = pd.DataFrame(data)
+st.sidebar.title("API cost estimation (Prompt 10,000 tokens, Completion 2,000 Tokens)")
+st.sidebar.table(df_costs)
+
 
 # Function to add conversation to history with formatted title
 def add_to_history(user_input, response, file_name):
@@ -78,6 +127,12 @@ def add_to_history(user_input, response, file_name):
 
 client_openai = OpenAI(api_key=openai_api_key)
 client = Anthropic(api_key=anthropic_api_key)
+
+#count tokens
+def num_tokens_from_string(string: str, encoding_name: str) -> int:
+    encoding = tiktoken.get_encoding(encoding_name)
+    num_tokens = len(encoding.encode(string))
+    return num_tokens
 
 # File uploader
 # File uploader and PDF reading
@@ -95,7 +150,8 @@ if uploaded_file is not None:
 if text:
     st.subheader("Extract PDF contents")
     st.text_area("", value=text, height=300)
-
+    text_token_count = num_tokens_from_string(text, "cl100k_base")
+    st.markdown(f"(**Extracted PDF Token Count:** {text_token_count})")
 
 #Define system prompt
 with open("./system_prompt.txt","r") as f:
@@ -111,6 +167,8 @@ def generate_response_openai(prompt, selected_model, temperature, max_tokens):
         st.warning('Please enter your OpenAI API key!', icon='⚠')
         return
     full_prompt = f"{system_prompt}\n{prompt}"
+    prompt_token_count = num_tokens_from_string(full_prompt, "cl100k_base")
+    st.markdown(f"**Prompt Token Count(system prompt added):** {prompt_token_count}")
     completion = client_openai.chat.completions.create(
     model=selected_model,
     temperature = temperature,
@@ -126,6 +184,8 @@ def generate_response_anthropic(prompt, selected_model, temperature, max_tokens)
     if not anthropic_api_key.startswith('sk-'):
         st.warning('Please enter your Anthropic API key!', icon='⚠')
     if submitted and anthropic_api_key.startswith('sk-'):
+        prompt_token_count = num_tokens_from_string(prompt, "cl100k_base")
+        st.markdown(f"**Prompt Token Count:** {prompt_token_count}")
         response = client.messages.create(
         system = system_prompt,
         max_tokens=max_tokens,
@@ -174,6 +234,8 @@ with st.form('my_form'):
                 response_text = generate_response_anthropic(input_text, selected_model, temperature, max_tokens)
             if response_text:
                     st.code(response_text, language="text")
+                    completion_token_count = num_tokens_from_string(response_text, "cl100k_base")
+                    st.markdown(f"**Completion Token Count:** {completion_token_count}")
                     add_to_history(input_text, response_text, file_name)
 
 # Display conversation history in the main window
