@@ -61,6 +61,11 @@ According to OpenAI and Anthropic, information sent via their APIs is not used f
 - [Anthropic Support](https://support.anthropic.com/en/articles/7996875-can-you-delete-data-that-i-sent-via-api)
 """)
 
+# Add a new section for how to use the Paper Summarizer
+st.markdown("For instructions on how to use the Paper Summarizer, visit the following link:")
+st.markdown("[How to Use Paper Summarizer](https://github.com/aisprint/paper_summarizer_v2/blob/master/README.md)", unsafe_allow_html=True)
+
+
 # Initialize or update the session state for conversation history
 if 'history' not in st.session_state:
     st.session_state.history = []
