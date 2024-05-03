@@ -49,7 +49,12 @@ st.markdown("""
 st.markdown('<div class="title-style">🎓Paper Summarizer📜</div>', unsafe_allow_html=True)
 
 # how to use the Paper Summarizer
-st.markdown("[How to Use Paper Summarizer](https://github.com/aisprint/paper_summarizer_v2/blob/master/README.md)", unsafe_allow_html=True)
+st.markdown("""
+<div style="text-align: center;">
+    For instructions on how to use the Paper Summarizer, visit the following link:<br>
+    <a href="https://github.com/aisprint/paper_summarizer_v2/blob/master/README.md">How to Use Paper Summarizer</a>
+</div>
+""", unsafe_allow_html=True)
 
 # Display author and the updated date
 current_date = datetime.now().strftime("%m/%d/%Y")
