@@ -48,6 +48,9 @@ st.markdown("""
 # Display the stylish title
 st.markdown('<div class="title-style">🎓Paper Summarizer📜</div>', unsafe_allow_html=True)
 
+# how to use the Paper Summarizer
+st.markdown("[How to Use Paper Summarizer](https://github.com/aisprint/paper_summarizer_v2/blob/master/README.md)", unsafe_allow_html=True)
+
 # Display author and the updated date
 current_date = datetime.now().strftime("%m/%d/%Y")
 st.markdown('<div class="author-style">By Mamoru</div>', unsafe_allow_html=True)
@@ -61,8 +64,6 @@ According to OpenAI and Anthropic, information sent via their APIs is not used f
 - [Anthropic Support](https://support.anthropic.com/en/articles/7996875-can-you-delete-data-that-i-sent-via-api)
 """)
 
-# how to use the Paper Summarizer
-st.markdown("[How to Use Paper Summarizer](https://github.com/aisprint/paper_summarizer_v2/blob/master/README.md)", unsafe_allow_html=True)
 
 # Initialize or update the session state for conversation history
 if 'history' not in st.session_state:
