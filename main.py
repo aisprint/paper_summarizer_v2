@@ -53,7 +53,13 @@ current_date = datetime.now().strftime("%m/%d/%Y")
 st.markdown('<div class="author-style">By Mamoru</div>', unsafe_allow_html=True)
 st.markdown(f'<div class="update-date-style">Last Updated: {current_date}</div>', unsafe_allow_html=True)
 
-
+# Privacy Policy
+privacy_policy = st.expander("Privacy Policy")
+privacy_policy.write("""
+According to OpenAI and Anthropic, information sent via their APIs is not used for training large language models (LLMs).
+- [OpenAI Documentation](https://platform.openai.com/docs/introduction)
+- [Anthropic Support](https://support.anthropic.com/en/articles/7996875-can-you-delete-data-that-i-sent-via-api)
+""")
 
 # Initialize or update the session state for conversation history
 if 'history' not in st.session_state:
