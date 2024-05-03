@@ -7,7 +7,7 @@ This project includes a Python application that summarizes PDF documents using A
 The app is available at the Streamlit server:
 [Paper Summarizer V2](https://papersummarizerv2-ertgst946lkt3qpqf5cxup.streamlit.app/)
 
-### How to Use the App
+## How to Use the App
 
 1. Get an API key for the model you intend to use and enter it in the API Key field in the left sidebar. Refer to the respective links for instructions on how to obtain the API keys.
 2. Upload the paper (PDF file) you want to summarize by clicking "Browse Files" or drag and drop the file into the designated area. The content of the paper will be automatically extracted and displayed in text format.
