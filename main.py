@@ -8,6 +8,7 @@ from PyPDF2 import PdfReader
 
 from anthropic import Anthropic
 from openai import OpenAI
+import google.generativeai as genai
 
 import tiktoken
 
@@ -91,35 +92,49 @@ st.sidebar.markdown(
     unsafe_allow_html=True
 )
 
+google_api_key = st.sidebar.text_input('Gemini API Key', type='password')
+st.sidebar.markdown(
+    "[How to get Gemini API key?](https://ai.google.dev/gemini-api/docs/api-key)", 
+    unsafe_allow_html=True
+)
+st.sidebar.markdown(
+    "[Gemini API Pricing](https://ai.google.dev/pricing)", 
+    unsafe_allow_html=True
+)
+
 # API Pricing
 data = {
     "Model": [
         "claude-3-haiku-20240307", 
         "claude-3-sonnet-20240229", 
+        "claude-3-opus-20240229",
         "gpt-3.5-turbo", 
         "gpt-4-turbo", 
-        "claude-3-opus-20240229"
+        "gemini-1.5-pro-latest"
     ],
     "Prompt Cost": [
         "$0.0025", 
         "$0.03", 
+        "$0.15",
         "$0.005", 
         "$0.1", 
-        "$0.15"
+        "$0.07"
     ],
     "Completion Cost": [
         "$0.0025", 
         "$0.03", 
+        "$0.15",
         "$0.003", 
         "$0.06", 
-        "$0.15"
+        "$0.042"
     ],
     "Total Cost": [
         "$0.005", 
         "$0.06", 
+        "$0.3",
         "$0.008", 
         "$0.16", 
-        "$0.3"
+        "$0.112"
     ]
 }
 
@@ -127,6 +142,7 @@ data = {
 df_costs = pd.DataFrame(data)
 st.sidebar.title("API cost estimation (Prompt 10,000 tokens, Completion 2,000 Tokens)")
 st.sidebar.table(df_costs)
+
 
 
 # Function to add conversation to history with formatted title
@@ -138,6 +154,7 @@ def add_to_history(user_input, response, file_name):
 
 client_openai = OpenAI(api_key=openai_api_key)
 client = Anthropic(api_key=anthropic_api_key)
+genai.configure(api_key=google_api_key)
 
 #count tokens
 def num_tokens_from_string(string: str, encoding_name: str) -> int:
@@ -208,6 +225,23 @@ def generate_response_anthropic(prompt, selected_model, temperature, max_tokens)
     ) 
     return response.content[0].text
 
+
+#Google Gemini Pro 1.5
+def generate_response_gemini(prompt, selected_model, temperature, max_token):
+    # if not google_api_key.startswith('AI'):
+    #     st.warning('Please enter correct Gemini API key!', icon='⚠')   
+    #     return
+        generation_config = {
+            'temperature': temperature,
+            'top_k': 0,  # Assuming top_k is not to be modified per call in this setup
+            'top_p': 1,  # Fixed top_p for more creative responses
+            'max_output_tokens': max_token,
+        }
+        model = genai.GenerativeModel(model_name=selected_model,generation_config=generation_config)
+        results = model.generate_content(prompt)
+        response = results.candidates[0].content.parts[0].text
+        return response
+
 # CSS to inject custom styles in the Streamlit app
 css_style = """
 <style>
@@ -226,6 +260,7 @@ models = [
     "gpt-3.5-turbo",
     "gpt-4-turbo",
     "claude-3-opus-20240229",
+    "gemini-1.5-pro-latest"
 ]
 
 with st.form('my_form'):
@@ -241,10 +276,12 @@ with st.form('my_form'):
         with st.spinner('Summarizing.....🤖💤'):
             if selected_model.startswith('gpt'):
                 response_text = generate_response_openai(input_text, selected_model, temperature, max_tokens)
-            else:
+            elif selected_model.startswith('claude'):
                 response_text = generate_response_anthropic(input_text, selected_model, temperature, max_tokens)
+            else:
+                response_text=generate_response_gemini(input_text, selected_model, temperature, max_tokens)
             if response_text:
-                    st.code(response_text, language="text")
+                    st.text_area("Summary:", value=response_text, height=800, disabled=False)
                     completion_token_count = num_tokens_from_string(response_text, "cl100k_base")
                     st.markdown(f"**Completion Token Count:** {completion_token_count}")
                     add_to_history(input_text, response_text, file_name)
