@@ -16,6 +16,10 @@ The app is available at the Streamlit server:
 5. Use the copy button at the top right of the displayed results to copy the summary. If the response is truncated, increase the Max Tokens value and submit again.
 6. History can be viewed from the dropdown list at the bottom of the page, but note that all history will be cleared when the app window is closed.
 
+
+## Paper Summarizer Prompt
+The prompt for the paper summarizer references the prompt from https://github.com/nhaouari/papersnap.
+
 ## Installation
 Clone this repository and install required packages:
 
